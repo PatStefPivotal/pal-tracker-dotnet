@@ -40,8 +40,8 @@ jobs:
             apt-get update
             apt-get install cf-cli
       - run:
-          command: |
           name: Install jq
+          command: |
             apt-get -y install jq
 
       - run:
