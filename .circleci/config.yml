@@ -39,7 +39,15 @@ jobs:
             echo "deb https://packages.cloudfoundry.org/debian stable main" | tee /etc/apt/sources.list.d/cloudfoundry-cli.list
             apt-get update
             apt-get install cf-cli
+      - run:
+          command: |
+          name: Install jq
+            apt-get -y install jq
 
+      - run:
+          name: Install flyway
+          command: |
+            curl https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.1.1/flyway-commandline-5.1.1-linux-x64.tar.gz | tar xvz
       - run:
           name: Unzip artifacts
           command: |
@@ -52,6 +60,7 @@ jobs:
             cd $EXTRACT_DEST
 
             cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $ENVIRONMENT
+            ./migrate-databases.sh pal-tracker . /root/project
             cf push -f manifest-$ENVIRONMENT.yml
 
   deployToProd:
@@ -73,7 +82,15 @@ jobs:
             echo "deb https://packages.cloudfoundry.org/debian stable main" | tee /etc/apt/sources.list.d/cloudfoundry-cli.list
             apt-get update
             apt-get install cf-cli
+      - run:
+          name: Install jq
+          command: |
+            apt-get -y install jq
 
+      - run:
+          name: Install flyway
+          command: |
+            curl https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.1.1/flyway-commandline-5.1.1-linux-x64.tar.gz | tar xvz
       - run:
           name: Unzip artifacts
           command: |
@@ -86,6 +103,7 @@ jobs:
             cd $EXTRACT_DEST
 
             cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $ENVIRONMENT
+            ./migrate-databases.sh pal-tracker . /root/project
             cf push -f manifest-$ENVIRONMENT.yml
 
 workflows:

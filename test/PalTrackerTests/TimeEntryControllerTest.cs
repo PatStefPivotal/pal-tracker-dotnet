@@ -133,6 +133,7 @@ namespace PalTrackerTests
 
             Assert.IsType<NoContentResult>(response);
 
+            _repository.Verify(x => x.Delete(1), Times.Once());
             var typedResponse = response as NoContentResult;
 
             Assert.Equal(204, typedResponse.StatusCode);
